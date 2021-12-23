@@ -105,7 +105,7 @@ class Lexicon:
 
         #closing the file    
         file.close()
-        print("Articles= {}",article_count)
+        print(f"Articles= {article_count}")
 
     #end of function
 
