@@ -24,8 +24,14 @@ def GenerateInvertedIndex(InvertedIndexRange):
 		GenInvIndDict = []
 
 		for index in InvertedIndexRange:
-			thread = executor.submit(GenInvInd.CreateInvertedIndex, os.path.join(ProjectConfiguration.FORWARDINDEXPATH, index))
 
+			fileToOpen=os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{index}")
+			if os.path.isfile(fileToOpen):
+
+				thread = executor.submit(GenInvInd.CreateInvertedIndex, fileToOpen)
+				GenInvIndDict.append(thread)
+
+		
 		for index in concurrent.futures.as_completed(GenInvIndDict):
 			print(f"{index.result()}  Inverted Index Created Successfully!")
 
