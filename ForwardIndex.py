@@ -48,7 +48,10 @@ class ForwardIndex:
 
                 DocumentId = os.path.splitext(ntpath.basename(path))[0]
 
-                token = nltk.word_tokenize(document['content'])
+                words= document['content']
+
+                # token = nltk.word_tokenize(document['content'])
+                token = re.sub('[^A-Za-z]', " ", words).split()
 
 
                 #Removing Punctuations
