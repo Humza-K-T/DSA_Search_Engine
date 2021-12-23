@@ -1,1 +1,1 @@
-yield
+GenerateForwardIndex.GenerateForwardIndex(starting,ending)

@@ -74,6 +74,7 @@ class Lexicon:
     def CreateLexicon(self, documentpath):
 
         Lexicon2 = self.lexicon
+        article_count=0
 
         #iterating through each path
         for path in tqdm(documentpath):
@@ -88,6 +89,7 @@ class Lexicon:
                 #calling the function,passignthe args
                 token1 = self.CreateTokens(document['title'])
                 token2 = self.CreateTokens(document['content'])
+                article_count+=1
 
                 for x in token1:
                     if x != '' and x not in Lexicon2:
@@ -103,6 +105,7 @@ class Lexicon:
 
         #closing the file    
         file.close()
+        print("Articles= {}",article_count)
 
     #end of function
 
