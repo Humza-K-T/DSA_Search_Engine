@@ -64,10 +64,10 @@ def GenerateForwardIndex(startingfile, endingfile):
 			if i >= number:
 				break
 			
-			#printing
-			print(f"\t{doc_id}:")
-			for word_id in ForwardIndexOpen[doc_id]:
-				print(f"\t\t{word_id}: {ForwardIndexOpen[doc_id][word_id]}")
+	# 		#printing
+	# 		print(f"\t{doc_id}:")
+	# 		for word_id in ForwardIndexOpen[doc_id]:
+	# 			print(f"\t\t{word_id}: {ForwardIndexOpen[doc_id][word_id]}")
 
 
 	print("\n")
