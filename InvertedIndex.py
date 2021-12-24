@@ -107,7 +107,7 @@ class InvertedIndex:
     def retrieve(self, wordid):
 
         BarInd2 = wordid // self.barrel_size
-        filename = os.path.join(self.path, f"{BarInd2:03}_inverted")
+        filename = os.path.join(self.path, f"{BarInd2:003}_inverted")
 
         with open(filename, 'rb') as InvertedIndexData4:
             InvInd3 = pickle.load(InvertedIndexData4)
