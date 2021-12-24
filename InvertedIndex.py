@@ -106,7 +106,7 @@ class InvertedIndex:
 
     def retrieve(self, wordid):
 
-        BarInd2 = wordid // self.barrel_size
+        BarInd2 = wordid // self.barrelsize
         filename = os.path.join(self.path, f"{BarInd2:003}_inverted")
 
         with open(filename, 'rb') as InvertedIndexData4:
