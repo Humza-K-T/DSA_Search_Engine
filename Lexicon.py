@@ -3,6 +3,7 @@ import pickle
 import re
 import json
 import nltk
+
 from tqdm import tqdm
 
 class Lexicon:
@@ -20,7 +21,11 @@ class Lexicon:
     def __init__(self, path):
 
         self.path = path
+        self.DocHistory={}
+        self.DocHistoryPath=self.path+"Doclist"
         self.lexicon = self.OpenLexicon()
+        
+       
 
     #end of functrion
 
@@ -61,6 +66,22 @@ class Lexicon:
 
             #closing file    
             file.close()
+         #try block
+       
+        DocHistoryPath= self.DocHistoryPath
+        try:
+            OpenFile1 = open(DocHistoryPath , 'rb')
+            self.DocHistory = pickle.load(OpenFile1)
+            OpenFile1.close()
+
+        #catch block    
+        except IOError:
+            # os.makedirs(DocHistoryPath, exist_ok=True)
+            with open(DocHistoryPath, 'wb') as file:
+
+                #dumping file
+                pickle.dump(self.DocHistory, file)
+   
 
         return Lexicon1
 
@@ -76,32 +97,44 @@ class Lexicon:
         Lexicon2 = self.lexicon
         article_count=0
 
+
+        DocHistoryPath=self.DocHistoryPath
+
         #iterating through each path
         for path in tqdm(documentpath):
-            with open(path, encoding="utf8") as OpenFile2:
 
-                 #reading the file
-                documents = json.load(OpenFile2)
+            if path not in self.DocHistory:
+                
 
-            #closing the file    
-            OpenFile2.close()
-            for document in documents:
-                #calling the function,passignthe args
-                token1 = self.CreateTokens(document['title'])
-                token2 = self.CreateTokens(document['content'])
-                article_count+=1
+                with open(path, encoding="utf8") as OpenFile2:
 
-                for x in token1:
-                    if x != '' and x not in Lexicon2:
-                        Lexicon2[x] = len(Lexicon2) + 1
+                    #reading the file
+                    documents = json.load(OpenFile2)
+                    self.DocHistory[path]=1
 
-                for x in token2:
-                    if x != '' and x not in Lexicon2:
-                        Lexicon2[x] = len(Lexicon2) + 1
+                #closing the file    
+                OpenFile2.close()
+                for document in documents:
+                    #calling the function,passignthe args
+                    token1 = self.CreateTokens(document['title'])
+                    token2 = self.CreateTokens(document['content'])
+                    article_count+=1
+
+                    for x in token1:
+                        if x != '' and x not in Lexicon2:
+                            Lexicon2[x] = len(Lexicon2) + 1
+
+                    for x in token2:
+                        if x != '' and x not in Lexicon2:
+                            Lexicon2[x] = len(Lexicon2) + 1
 
         #saving the lexicon created
         with open(self.path, 'wb') as file:
             pickle.dump(Lexicon2, file)
+
+
+        with open(DocHistoryPath, 'wb') as file:
+            pickle.dump(self.DocHistory, file)
 
         #closing the file    
         file.close()
@@ -141,7 +174,7 @@ class Lexicon:
     #returns lexicon
 
     def ReadLexicon(self):
-
+        
         OpenFile3 = open(self.path, 'rb')
         Lexicon3 = pickle.load(OpenFile3)
         OpenFile3.close()

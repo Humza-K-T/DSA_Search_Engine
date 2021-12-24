@@ -8,7 +8,7 @@ OUTPUTPATH = os.path.join(PROJECTPATH, "Output")
 LEXICONPATH = os.path.join(PROJECTPATH, "Output/Lexicon/Lexicon")
 FORWARDINDEXPATH = os.path.join(PROJECTPATH, "Output/ForwardIndex")
 INVERTEDINDEXPATH = os.path.join(PROJECTPATH, "Output/InvertedIndex")
-TEMPORARYINVERTEDINDEXPATH = os.path.join(PROJECTPATH, "Output/Temporary")
+TEMPORARYINVERTEDINDEXPATH = os.path.join(PROJECTPATH, "Output/InvertedIndex/Temporary")
 
 MAXIMUMSIZE = 512
 

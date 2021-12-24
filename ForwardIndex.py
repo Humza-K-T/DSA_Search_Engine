@@ -22,6 +22,7 @@ class ForwardIndex:
     def __init__(self, path, lexicon):
 
         self.path = path
+
         self.lexicon = lexicon
 
     #end of constructor
@@ -35,60 +36,85 @@ class ForwardIndex:
 
         #creating empty dictionary
         ForwardIndexDictionary= {}
+        
 
         #passing every path & opening file
+        #try block
+        DocHistory={}
+        DocHistoryPath=self.path+ "\\Doclist"
+        try:
+            OpenFile1 = open(DocHistoryPath , 'rb')
+            DocHistory = pickle.load(OpenFile1)
+            OpenFile1.close()
+
+        #catch block    
+        except IOError:
+            
+            with open(DocHistoryPath, 'wb') as file:
+
+                #dumping file
+                pickle.dump(DocHistory, file)
+
+            #closing file
 
         for path in tqdm(documentpaths):
-            with open(path, encoding="utf8") as OpenFile:
-                documents = json.load(OpenFile)  
 
-            for document in documents:
+            if path not in DocHistory:
+                
+                with open(path, encoding="utf8") as OpenFile:
+                    documents = json.load(OpenFile)
+                    DocHistory[path]=1  
 
-
-
-                DocumentId = os.path.splitext(ntpath.basename(path))[0]
-
-                words= document['content']
-
-                # token = nltk.word_tokenize(document['content'])
-                token = re.sub('[^A-Za-z]', " ", words).split()
+                for document in documents:
 
 
-                #Removing Punctuations
-                #Removing URL's
-                #RStemming words
 
-                token = [re.sub(r'^https?:\/\/.*[\r\n]*', '', x, flags=re.MULTILINE) for x in token]
-                token = [re.sub(r'[^A-Za-z]+', '', x) for x in token]
-                token = [x for x in token if not x in self.GlobalStopwords]
-                token = [self.GlobalStemmer.stem(x) for x in token]
+                    DocumentId = os.path.splitext(ntpath.basename(path))[0]
+
+                    words= document['content']
+
+                    # token = nltk.word_tokenize(document['content'])
+                    token = re.sub('[^A-Za-z]', " ", words).split()
 
 
-                #creating empty dictionary
-                WordId = {}
+                    #Removing Punctuations
+                    #Removing URL's
+                    #RStemming words
 
-                #creating variable for word position
-                position = 1
+                    token = [re.sub(r'^https?:\/\/.*[\r\n]*', '', x, flags=re.MULTILINE) for x in token]
+                    token = [re.sub(r'[^A-Za-z]+', '', x) for x in token]
+                    token = [x for x in token if not x in self.GlobalStopwords]
+                    token = [self.GlobalStemmer.stem(x) for x in token]
 
-                #iterating through each word
-                for word in token:
-                    if word != '' and self.lexicon.Exist(word):
-                        key = self.lexicon.SearchWordId(word)
-                        if key in WordId:
-                            WordId[key].append(position)
-                        else:
-                            WordId[key] = [position]
 
-                        #incrementing position
-                        position = position + 1
+                    #creating empty dictionary
+                    WordId = {}
 
-                ForwardIndexDictionary[DocumentId] = WordId
+                    #creating variable for word position
+                    position = 1
+
+                    #iterating through each word
+                    for word in token:
+                        if word != '' and self.lexicon.Exist(word):
+                            key = self.lexicon.SearchWordId(word)
+                            if key in WordId:
+                                WordId[key].append(position)
+                            else:
+                                WordId[key] = [position]
+
+                            #incrementing position
+                            position = position + 1
+
+                    ForwardIndexDictionary[DocumentId] = WordId
 
         #dumping file
 
         path = os.path.join(self.path, filename)
         with open(path, 'wb') as file:
             pickle.dump(ForwardIndexDictionary, file)
+
+        with open(DocHistoryPath, 'wb') as file:
+            pickle.dump(DocHistory, file)
 
         #returning
         return path

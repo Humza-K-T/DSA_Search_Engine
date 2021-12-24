@@ -56,13 +56,13 @@ def GenerateForwardIndex(startingfile, endingfile):
 	print(f"{number} entrie(s) from barrel {barrel}:")
 	print("\n")
 
-	with open(os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{barrel}"), 'rb') as ForwardIndexData:
+	# with open(os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{barrel}"), 'rb') as ForwardIndexData:
 		
-		ForwardIndexOpen = pickle.load(ForwardIndexData)
-		for i, doc_id in enumerate(ForwardIndexOpen):
+	# 	ForwardIndexOpen = pickle.load(ForwardIndexData)
+	# 	for i, doc_id in enumerate(ForwardIndexOpen):
 
-			if i >= number:
-				break
+	# 		if i >= number:
+	# 			break
 			
 	# 		#printing
 	# 		print(f"\t{doc_id}:")
