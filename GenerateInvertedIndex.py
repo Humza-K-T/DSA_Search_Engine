@@ -23,12 +23,13 @@ def GenerateInvertedIndex(InvertedIndexRange):
 		#creating empty dictionary
 		GenInvIndDict = []
 
-		for index in InvertedIndexRange:
 
-			fileToOpen=os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{index}")
-			if os.path.isfile(fileToOpen):
-
-				thread = executor.submit(GenInvInd.CreateInvertedIndex, fileToOpen)
+		mypath=ProjectConfiguration.FORWARDINDEXPATH
+		filesToOpen=[f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f)) and f.startswith("batch_")]
+		for file in filesToOpen:
+			file= ProjectConfiguration.FORWARDINDEXPATH+"/"+file
+			thread = executor.submit(GenInvInd.CreateInvertedIndex, file)
+			GenInvIndDict.append(thread)
 
 
 		

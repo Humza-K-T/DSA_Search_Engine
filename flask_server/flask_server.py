@@ -9,6 +9,7 @@ import ProjectConfiguration
 from Lexicon import Lexicon
 from InvertedIndex import InvertedIndex
 from search.search import Search
+import pickle
 
 
 # flask app & Api
@@ -53,18 +54,27 @@ class Search(Resource):
 
         for doc, _ in docs:
 
-            doc_id = int(doc[-7:])
-            batch = doc_id // 64 + 1
+            # doc_id = int(doc[-7:])
+            # batch = doc_id // 64 + 1
 
-            filepath = os.path.join(ProjectConfiguration.DATASET_PATH, f"batch_{batch:02}", f"{doc}.json")
+            docAdress=ProjectConfiguration.UPDATED_JSONS+ doc
 
-            with open(filepath, encoding="utf-8") as json_file:
-                json_doc = json.load(json_file)
-                results.append({
-                    "title": json_doc['title'],
-                    "description": json_doc['text'][:64],
-                    "path": f"/doc/{doc}",
-                    })
+            filepath = docAdress
+
+            with open(filepath, "rb") as pickle_file:
+                pickle_doc = pickle.load(pickle_file)
+
+                
+                    # if doc['content'].contains(search_query):
+                            
+
+
+                if pickle_doc['title']!="":
+                    results.append({
+                        "title": doc['title'],
+                        "description": doc['content'][:64],
+                        "path": doc['url'],
+                        })
 
         return results
 

@@ -1,1 +1,1 @@
-GenerateForwardIndex.GenerateForwardIndex(starting,ending)
+	

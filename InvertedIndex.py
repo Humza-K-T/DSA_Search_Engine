@@ -47,8 +47,8 @@ class InvertedIndex:
                     with open(filename, 'wb+') as InvertedIndexData:
                         pickle.dump(InvIndBar, InvertedIndexData)
 
-        #returning
-        return filename
+                    #returning
+                    return filename
 
     #end of function
     
