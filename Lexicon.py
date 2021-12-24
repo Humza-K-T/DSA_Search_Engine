@@ -127,6 +127,12 @@ class Lexicon:
                     for x in token2:
                         if x != '' and x not in Lexicon2:
                             Lexicon2[x] = len(Lexicon2) + 1
+                    
+                    docName=''.join(e for e in (document['url'].lstrip("https://").replace("/","_")) if e.isalnum())
+                    docpath= self.path.rstrip("Lexicon/Lexicon")+"/UpdatedJsons/"+docName
+                    with open(docpath,"wb") as newjson:
+                        pickle.dump(document,newjson)
+
 
         #saving the lexicon created
         with open(self.path, 'wb') as file:

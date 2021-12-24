@@ -25,7 +25,7 @@ def GenerateForwardIndex(startingfile, endingfile):
 
 		#if starting file number is same as endong file number
 		if startingfile == endingfile:
-			Thread1 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, startingfile + 1), f"batch_00{startingfile}")
+			Thread1 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, startingfile + 1), f"batch_00{startingfile}",True)
 			GenForIndDict.append(Thread1)
 
 		#if starting file number is NOT same as endong file number

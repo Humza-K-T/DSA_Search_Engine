@@ -11,7 +11,7 @@ def GenerateLexicon(startingfile, endingfile):
 	#creating lexicon, passing the path
 	lexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
 
-	#calling function
+	#calling function to use dataset files
 	lexicon.CreateLexicon(ProjectConfiguration.InputPath(startingfile, endingfile))
 
 	print("\n")
