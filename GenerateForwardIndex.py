@@ -25,14 +25,14 @@ def GenerateForwardIndex(startingfile, endingfile):
 
 		#if starting file number is same as endong file number
 		if startingfile == endingfile:
-			Thread1 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, startingfile + 1), f"batch_00{startingfile}",True)
+			Thread1 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, startingfile + 1,True), f"batch_00{startingfile}",True)
 			GenForIndDict.append(Thread1)
 
 		#if starting file number is NOT same as endong file number
 		else:
 			middle = int(( startingfile+endingfile) / 2)
-			Thread2 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, middle), f"batch_00{startingfile}")
-			Thread3= executor.submit(GenForInd.AddForwardIndex,ProjectConfiguration.InputPath(middle, endingfile), f"batch_00{middle}")
+			Thread2 = executor.submit(GenForInd.AddForwardIndex, ProjectConfiguration.InputPath(startingfile, middle,True), f"batch_00{startingfile}")
+			Thread3= executor.submit(GenForInd.AddForwardIndex,ProjectConfiguration.InputPath(middle, endingfile,True), f"batch_00{middle}")
 			
 			GenForIndDict.append(Thread2)
 			GenForIndDict.append(Thread3)
@@ -41,20 +41,20 @@ def GenerateForwardIndex(startingfile, endingfile):
 			print("\n")
 			print(f"{index.result()} Forward Index Created Successfully!")
 
-	print("\n")
+	# print("\n")
 	
-	#printing process progress
+	# #printing process progress
 	
-	print('-'*137)
-	print('*'*137)
+	# print('-'*137)
+	# print('*'*137)
 
-	#initializing variables
-	barrel = 0
-	number = endingfile-startingfile
+	# #initializing variables
+	# barrel = 0
+	# number = endingfile-startingfile
 
-	print("\n")
-	print(f"{number} entrie(s) from barrel {barrel}:")
-	print("\n")
+	# print("\n")
+	# print(f"{number} entrie(s) from barrel {barrel}:")
+	# print("\n")
 
 	# with open(os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{barrel}"), 'rb') as ForwardIndexData:
 		
@@ -70,8 +70,8 @@ def GenerateForwardIndex(startingfile, endingfile):
 	# 			print(f"\t\t{word_id}: {ForwardIndexOpen[doc_id][word_id]}")
 
 
-	print("\n")
-	print('*'*137)
-	print('-'*137)
+	# print("\n")
+	# print('*'*137)
+	# print('-'*137)
 
 	#end of function
