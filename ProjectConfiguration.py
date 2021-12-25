@@ -12,7 +12,7 @@ FORWARDINDEXPATH = os.path.join(PROJECTPATH, "Output/ForwardIndex")
 INVERTEDINDEXPATH = os.path.join(PROJECTPATH, "Output/InvertedIndex")
 TEMPORARYINVERTEDINDEXPATH = os.path.join(PROJECTPATH, "Output/InvertedIndex/Temporary")
 
-MAXIMUMSIZE = 512
+MAXIMUMSIZE = 5120000
 
 def InputPath(start=None, end=None,useNewJsons=False):
 

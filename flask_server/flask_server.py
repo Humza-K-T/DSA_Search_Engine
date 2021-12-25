@@ -57,23 +57,23 @@ class Search(Resource):
             # doc_id = int(doc[-7:])
             # batch = doc_id // 64 + 1
 
-            docAdress=ProjectConfiguration.UPDATED_JSONS+ doc
+            docAdress=ProjectConfiguration.UPDATED_JSONS+"/"+ doc
 
-            filepath = docAdress
+            filepath = docAdress+".json"
 
-            with open(filepath, "rb") as pickle_file:
-                pickle_doc = pickle.load(pickle_file)
+            with open(filepath, "rb") as json_file:
+                json_doc = json.load(json_file)
 
                 
                     # if doc['content'].contains(search_query):
-                            
+            
 
 
-                if pickle_doc['title']!="":
+                if json_doc['title']!="":
                     results.append({
-                        "title": doc['title'],
-                        "description": doc['content'][:64],
-                        "path": doc['url'],
+                        "title": json_doc['title'],
+                        "description": json_doc['content'][:80],
+                        "path": json_doc['url'],
                         })
 
         return results

@@ -11,7 +11,7 @@ class Search:
 		inverted_index_entries = [self.inverted_index.retrieve(word_id) for word_id in search_word_ids if word_id != -1]
 
 		docs_with_score = []
-		if len(inverted_index_entries)==0: return docs_with_score
+		if len(inverted_index_entries)==0 or inverted_index_entries[0] == None: return docs_with_score
 		for i, iie in enumerate(inverted_index_entries):
 			for doc in iie:
 				current_doc_hitlists = [iie[doc]]
