@@ -114,6 +114,7 @@ class Lexicon:
 
                 #closing the file    
                 OpenFile2.close()
+                print("\n"+path)
                 for document in documents:
                     #calling the function,passignthe args
                     token1 = self.CreateTokens(document['title'])
@@ -129,9 +130,9 @@ class Lexicon:
                             Lexicon2[x] = len(Lexicon2) + 1
                     
                     docName=''.join(e for e in (document['url'].lstrip("https://").replace("/","_")) if e.isalnum())
-                    docpath= self.path.rstrip("Lexicon/Lexicon")+"/UpdatedJsons/"+docName
-                    with open(docpath,"wb") as newjson:
-                        pickle.dump(document,newjson)
+                    docpath= self.path.rstrip("Lexicon/Lexicon")+"/UpdatedJsons/"+docName[-50:]+".json"
+                    with open(docpath, "w") as newjson:
+                        json.dump(document,newjson)
 
 
         #saving the lexicon created
