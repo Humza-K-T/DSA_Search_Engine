@@ -60,5 +60,5 @@ import ProjectConfiguration
 # range = userinput.split(',')
 # # print("\n")
 
-GenerateInvertedIndex.GenerateInvertedIndex(range)
+GenerateInvertedIndex.GenerateInvertedIndex()
 

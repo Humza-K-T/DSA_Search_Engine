@@ -1,7 +1,10 @@
+
 import pickle
 import os
 import ntpath
 from tqdm import tqdm
+
+from ProjectConfiguration import FORWARDINDEXPATH
 
 class InvertedIndex:
 
@@ -24,31 +27,44 @@ class InvertedIndex:
     #returns name of file
 
     def CreateInvertedIndex(self, ForwardIndexPath):
-       
-        with open(ForwardIndexPath, 'rb') as ForwardIndexData1:
+        """
+        parameters: forward_index_path - The path to the forward index
+        that needs to be inverted.
 
-            ForInd1 = pickle.load(ForwardIndexData1)
-            InvInd1 = [{} for i in range(self.lexiconsize // self.barrelsize + 1)]
+        Invert this forward index and store it in self.temp_path. If a bucket
+        already exists there don't over write it.
 
-            for document in tqdm(ForInd1):
-                for word_id in ForInd1[document]:
+        return: void
 
-                    BarInd1 = word_id // self.barrelsize
+        This method expects to be called by multiple threads.
+        """
+        with open(ForwardIndexPath, 'rb') as forward_index_file:
+            forward_index = pickle.load(forward_index_file)
+            inverted_indexes = [{} for i in range(self.lexiconsize // self.barrelsize + 1)]
 
-                    if word_id in InvInd1[BarInd1]:
-                       InvInd1[BarInd1][word_id][document] = ForInd1[document][word_id]
+            for document in tqdm(forward_index):
+                for word_id in forward_index[document]:
+
+                    # Find concerned barrel
+                    barrel_index = word_id // self.barrelsize
+
+                    # inverted_indexes[barrel_index][word_id][document] = forward_index[document][word_id]
+
+                    if word_id in inverted_indexes[barrel_index]:
+                        inverted_indexes[barrel_index][word_id][document] = forward_index[document][word_id]
+                        # inverted_indexes[barrel_index][word_id].append({document: forward_index[document][word_id]})
                     else:
-                        InvInd1[BarInd1][word_id] = { document: ForInd1[document][word_id] }
-     
-            for i, InvIndBar in enumerate(InvInd1):
-                if not len(InvIndBar) == 0:
+                        inverted_indexes[barrel_index][word_id] = { document: forward_index[document][word_id] }
+                        # inverted_indexes[barrel_index][word_id] = [{document: forward_index[document][word_id]}]
+
+            # Saving inverted index barrels which are not empty
+            for i, inverted_index_barrel in enumerate(inverted_indexes):
+                if not len(inverted_index_barrel) == 0:
                     filename = os.path.join(self.temppath, f"{i:03}_inverted_{ntpath.basename(ForwardIndexPath)}")
+                    with open(filename, 'wb+') as inverted_index_file:
+                        pickle.dump(inverted_index_barrel, inverted_index_file)
 
-                    with open(filename, 'wb+') as InvertedIndexData:
-                        pickle.dump(InvIndBar, InvertedIndexData)
-
-                    #returning
-                    return filename
+        return filename
 
     #end of function
     
@@ -59,62 +75,69 @@ class InvertedIndex:
 
     def MergeIndex(self):
 
-        InvIndTemp = os.listdir(self.temppath)
+        """
+        Merge the temporary inverted indexes in self.temp_path with
+        the inverted index in self.path and save them.
+
+        This function expects to be called by the main thread.
+        """
+        temp_inverted_indexes = os.listdir(self.temppath)
 
         for i in range(self.lexiconsize // self.barrelsize + 1):
-            concerned_indexes = [temp_index for temp_index in InvIndTemp if temp_index.startswith(f"{i:003}_inverted")]
+            concerned_indexes = [temp_index for temp_index in temp_inverted_indexes if temp_index.startswith(f"{i:03}_inverted_")]
             
-            if not len(concerned_indexes):
-                continue
+            # If for i'th barrel no temp indexes exist continue
+            if not len(concerned_indexes): continue
 
-            filename = os.path.join(self.path, f"{i:003}_inverted")
-
-            #creating empty dictionary
-            InvInd2 = {}
-            
+            # Open barrel
+            filename = os.path.join(self.path, f"{i:03}_inverted")
+            inverted_index = {}
             if os.path.exists(filename):
-                if os.path.getsize(filename)>0 :  
-                    with open(filename, 'rb') as InvertedIndexData2:
-                        InvInd2 = pickle.load( InvertedIndexData2)
+                with open(filename, 'rb') as inverted_index_file:
+                    inverted_index = pickle.load(inverted_index_file)
 
-
-            #iterating through each
+            # For each temp index, append its content to main barrel
             for concerned_index in concerned_indexes:
-                with open(os.path.join(self.temppath , concerned_index), 'rb') as TemporaryIndexData:
-                    TempInd = pickle.load(TemporaryIndexData)
-
-                    #iterating through each
-                    for word_id in TempInd:
-
-                        if word_id in InvInd2:
-                            InvInd2[word_id].update(TempInd[word_id])
+                with open(os.path.join(self.temppath, concerned_index), 'rb') as temp_index_file:
+                    temp_index = pickle.load(temp_index_file)
+                    for word_id in temp_index:
+                        # TODO: What if temp_index[word_id] i.e. that document and its hit list already exists?? 
+                        if word_id in inverted_index:
+                            inverted_index[word_id].update(temp_index[word_id])
                         else:
-                            InvInd2[word_id] = TempInd[word_id]
+                            inverted_index[word_id] = temp_index[word_id]
 
-
+                # Delete temp index
                 os.remove(os.path.join(self.temppath, concerned_index))
             
-                with open (filename, 'wb') as InvertedIndexData3:
-                    pickle.dump( InvInd2, InvertedIndexData3)
-
-    #end of function
+            # Save updated index
+            with open (filename, 'wb') as inverted_index_file:
+                pickle.dump(inverted_index, inverted_index_file)
+                
+   #end of function
 
 
     #start of function
     #fun retrive takes self instance & wordid
     #returns if condition satisfied            
 
-    def retrieve(self, wordid):
+    def retrieve(self, word_id):
+        """
+        parameters: word_id - Word id for which to return inverted_index
 
-        BarInd2 = wordid // self.barrelsize
-        
-        filename = os.path.join(self.path, "000_inverted")
+        return: list of documents and the hitlists for that word_id
+        """
 
-        with open(filename, 'rb') as InvertedIndexData4:
-            InvInd3 = pickle.load(InvertedIndexData4)
+        # Find concerned barrel
+        # TODO: What if barrel does not exist
+        barrel_index = word_id // self.barrelsize
+        filename = os.path.join(self.path, f"{barrel_index:03}_inverted")
 
-            if wordid in InvInd3:
-                return InvInd3[wordid]
+        with open(filename, 'rb') as inverted_index_file:
+            inverted_index = pickle.load(inverted_index_file)
+
+            if word_id in inverted_index:
+                return inverted_index[word_id]
 
         return None
 

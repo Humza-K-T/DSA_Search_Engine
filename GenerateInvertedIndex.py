@@ -10,7 +10,7 @@ import concurrent.futures
 #Takes 1 arguments
 #returns nothing
 
-def GenerateInvertedIndex(InvertedIndexRange):
+def GenerateInvertedIndex():
 
 	#creating lexicon, passing the path
 	InvIndLexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
