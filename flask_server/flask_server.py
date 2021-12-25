@@ -1,15 +1,16 @@
 # imports
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template, request, redirect, url_for,flash
+from werkzeug.utils import secure_filename
 from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
-
+import ProjectConfiguration
 import os
 import json
 import ProjectConfiguration 
 from Lexicon import Lexicon
 from InvertedIndex import InvertedIndex
 from search.search import Search
-import pickle
+import RUNME
 
 
 # flask app & Api
@@ -17,6 +18,10 @@ app = Flask(__name__)
 api = Api(app)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['UPLOAD_FOLDER']=ProjectConfiguration.INPUTPATH+"//"
+
+
+
 
 # Indexes
 lexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
@@ -28,6 +33,19 @@ class Setup(Resource):
     @cross_origin()
     def get(self):
         return render_template('index.html')
+
+
+@app.route('/', methods=['POST'])
+def upload_file():
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        uploaded_file.save(ProjectConfiguration.INPUTPATH+"//"+uploaded_file.filename)
+        RUNME.ProcessFile()
+      
+    return redirect('http://127.0.0.1:5000/')
+
+
+
 
 
 class Document(Resource):
@@ -77,6 +95,11 @@ class Search(Resource):
                         })
 
         return results
+
+
+
+
+
 
 
 

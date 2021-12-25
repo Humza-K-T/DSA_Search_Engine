@@ -45,27 +45,27 @@ def GenerateInvertedIndex():
 	print('*'*137)
 
 	#initializing variables
-	barrel = 0
-	number = 20
+	# barrel = 0
+	# number = 20
 
-	print("\n")
-	print(f"{number} Barrel Enteries {barrel}:")
-	print("\n")
+	# print("\n")
+	# print(f"{number} Barrel Enteries {barrel}:")
+	# print("\n")
 
-	with open(os.path.join(ProjectConfiguration.INVERTEDINDEXPATH, f"{barrel:03}_inverted"), 'rb') as InvertedIndexData:
+	# with open(os.path.join(ProjectConfiguration.INVERTEDINDEXPATH, f"{barrel:03}_inverted"), 'rb') as InvertedIndexData:
 		
-		InvertedIndexOpen = pickle.load(InvertedIndexData)
-		for i, word_id in enumerate(InvertedIndexOpen):
+	# 	InvertedIndexOpen = pickle.load(InvertedIndexData)
+	# 	for i, word_id in enumerate(InvertedIndexOpen):
 
-			if i >= number:
-				break
+	# 		if i >= number:
+	# 			break
 			
-			#printing
-			print(f"\t{word_id}:")
-			for doc in InvertedIndexOpen[word_id]:
-				print(f"\t\t{doc}: {InvertedIndexOpen[word_id][doc]}")
+	# 		#printing
+	# 		print(f"\t{word_id}:")
+	# 		for doc in InvertedIndexOpen[word_id]:
+	# 			print(f"\t\t{doc}: {InvertedIndexOpen[word_id][doc]}")
 
-	print("\n")
-	print('*'*137)
-	print('-'*137)
+	# print("\n")
+	# print('*'*137)
+	# print('-'*137)
 	

@@ -8,6 +8,13 @@
     <link href="static/css/main.css" rel="stylesheet" />
   </head>
   <body>
+    
+
+    
+    <form method="POST" action="" enctype="multipart/form-data">
+      <p><input type="file" name="file"></p>
+      <p><input type="submit" value="Submit"></p>
+    </form>
     <div class="s130">
       <form>
         <div class="inner-form">
@@ -19,11 +26,17 @@
             </div>
             <input id="search" type="text" onkeypress="return runScript(event)" placeholder="What are you looking for?" />
           </div>
+
+     
+
           <div class="input-field second-wrap">
             <button class="btn-search" onclick="getResults()" type="button">SEARCH</button>
+
+
           </div>
         </div>
         <span class="info">ex. Game, Music, Video, Photography</span>
+
         <div class='search' id="search_results">
         </div>
       </form>
