@@ -11,7 +11,7 @@ import concurrent.futures
 #returns nothing
 
 def GenerateForwardIndex(startingfile, endingfile):
-	"""Genertaed forward index, takes all files as input, calls functions from GenerateForwardIndex.py file.
+	"""Genertaed forward index, takes all files as input, calls functions from ForwardIndex.py file.
 	Uses multithreading for parallel execution by dividing input files into 2 seprate threads."""
 
 

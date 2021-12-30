@@ -7,7 +7,7 @@ from Lexicon import Lexicon
 #returns nothing
 
 def GenerateLexicon(startingfile, endingfile):
-
+	"""Takes files & creates lexicon via functions in Lexicon.py file. Passes files, creates dictionary & prints the words."""
 	#creating lexicon, passing the path
 	lexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
 
@@ -32,15 +32,3 @@ def GenerateLexicon(startingfile, endingfile):
 	print(f"{number} Words Are: ")
 	print("\n")
 
-	# LexiconLexicon = lexicon.ReadLexicon()
-
-	# for i, word in enumerate(LexiconLexicon):
-	# 	if i >= number:
-	# 		break
-
-	# 	print(f"\t{word}: {LexiconLexicon[word]}")
-
-	# print("\n")
-	# print('*'*137)
-	# print('-'*137)
-	
