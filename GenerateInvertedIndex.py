@@ -11,6 +11,8 @@ import concurrent.futures
 #returns nothing
 
 def GenerateInvertedIndex():
+	"""Generate inverted index, takes nothing input, calls functions from InvertedIndex.py file.
+	First creating lexicon & invertedindex instance.Looks for files at respective path & creates threads and calls creatreinvertedindex func"""
 
 	#creating lexicon, passing the path
 	InvIndLexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
@@ -23,49 +25,19 @@ def GenerateInvertedIndex():
 		#creating empty dictionary
 		GenInvIndDict = []
 
-
 		mypath=ProjectConfiguration.FORWARDINDEXPATH
 		filesToOpen=[f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f)) and f.startswith("batch_")]
 		for file in filesToOpen:
 			file= ProjectConfiguration.FORWARDINDEXPATH+"/"+file
 			thread = executor.submit(GenInvInd.CreateInvertedIndex, file)
 			GenInvIndDict.append(thread)
-
-
 		
 		for index in concurrent.futures.as_completed(GenInvIndDict):
 			print(f"{index.result()}  Inverted Index Created Successfully!")
 
 		GenInvInd.MergeIndex()
 
-
-	#printing process progress
-
 	print('-'*137)
 	print('*'*137)
 
-	#initializing variables
-	# barrel = 0
-	# number = 20
-
-	# print("\n")
-	# print(f"{number} Barrel Enteries {barrel}:")
-	# print("\n")
-
-	# with open(os.path.join(ProjectConfiguration.INVERTEDINDEXPATH, f"{barrel:03}_inverted"), 'rb') as InvertedIndexData:
-		
-	# 	InvertedIndexOpen = pickle.load(InvertedIndexData)
-	# 	for i, word_id in enumerate(InvertedIndexOpen):
-
-	# 		if i >= number:
-	# 			break
-			
-	# 		#printing
-	# 		print(f"\t{word_id}:")
-	# 		for doc in InvertedIndexOpen[word_id]:
-	# 			print(f"\t\t{doc}: {InvertedIndexOpen[word_id][doc]}")
-
-	# print("\n")
-	# print('*'*137)
-	# print('-'*137)
 	
