@@ -33,7 +33,8 @@ class ForwardIndex:
     #returns path
 
     def AddForwardIndex(self, documentpaths, filename):
-
+        """Takes 3 arguments. Function is to go through each file & stemmerize words + remove punctuations
+            & URLs. Serialzes the files & dumps them. Takes self instance, document path & filename. Uses dictionaries """
         #creating empty dictionary
         ForwardIndexDictionary= {}
         
@@ -42,6 +43,8 @@ class ForwardIndex:
         #try block
         DocHistory={}
         DocHistoryPath=self.path+ "\\Doclist"
+
+        #looking for fies, opening them, loading & serializing them and then closing
         try:
             if os.path.getsize(DocHistoryPath) > 0:
                 OpenFile1 = open(DocHistoryPath , 'rb')
@@ -58,6 +61,7 @@ class ForwardIndex:
 
             #closing file
 
+        #if change detected
         change=False
         for path in tqdm(documentpaths):
 
@@ -82,7 +86,8 @@ class ForwardIndex:
 
                 #Removing Punctuations
                 #Removing URL's
-                #RStemming words
+                #Stemming words
+                #simply tokenizing
 
                 token = [re.sub(r'^https?:\/\/.*[\r\n]*', '', x, flags=re.MULTILINE) for x in token]
                 token = [re.sub(r'[^A-Za-z]+', '', x) for x in token]
@@ -94,6 +99,7 @@ class ForwardIndex:
                 WordId = {}
 
                 #creating variable for word position
+                #by default posiion is set to one
                 position = 1
 
                 #iterating through each word
@@ -112,6 +118,7 @@ class ForwardIndex:
 
         #dumping file
 
+        #if change detected opening file & dumping it
         path = os.path.join(self.path, filename)
         if(change):
             # path = os.path.join(self.path, filename)
