@@ -11,6 +11,9 @@ import concurrent.futures
 #returns nothing
 
 def GenerateForwardIndex(startingfile, endingfile):
+	"""Genertaed forward index, takes all files as input, calls functions from GenerateForwardIndex.py file.
+	Uses multithreading for parallel execution by dividing input files into 2 seprate threads."""
+
 
 	#creating lexicon, passing the path
 	ForIndLexicon = Lexicon(ProjectConfiguration.LEXICONPATH)
@@ -41,37 +44,4 @@ def GenerateForwardIndex(startingfile, endingfile):
 			print("\n")
 			print(f"{index.result()} Forward Index Created Successfully!")
 
-	# print("\n")
 	
-	# #printing process progress
-	
-	# print('-'*137)
-	# print('*'*137)
-
-	# #initializing variables
-	# barrel = 0
-	# number = endingfile-startingfile
-
-	# print("\n")
-	# print(f"{number} entrie(s) from barrel {barrel}:")
-	# print("\n")
-
-	# with open(os.path.join(ProjectConfiguration.FORWARDINDEXPATH, f"batch_00{barrel}"), 'rb') as ForwardIndexData:
-		
-	# 	ForwardIndexOpen = pickle.load(ForwardIndexData)
-	# 	for i, doc_id in enumerate(ForwardIndexOpen):
-
-	# 		if i >= number:
-	# 			break
-			
-	# 		#printing
-	# 		print(f"\t{doc_id}:")
-	# 		for word_id in ForwardIndexOpen[doc_id]:
-	# 			print(f"\t\t{word_id}: {ForwardIndexOpen[doc_id][word_id]}")
-
-
-	# print("\n")
-	# print('*'*137)
-	# print('-'*137)
-
-	#end of function
