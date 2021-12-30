@@ -18,9 +18,7 @@ def InputPath(start=None, end=None,useNewJsons=False):
 
     if (useNewJsons):
         for batch in os.listdir(UPDATED_JSONS)[start:end]:
-            #for filepath in os.listdir(os.path.join(INPUTPATH, batch)):
                 yield os.path.join(UPDATED_JSONS, batch)
     else:
             for batch in os.listdir(INPUTPATH)[start:end]:
-            #for filepath in os.listdir(os.path.join(INPUTPATH, batch)):
                 yield os.path.join(INPUTPATH, batch)
