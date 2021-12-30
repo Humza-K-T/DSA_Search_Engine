@@ -64,7 +64,7 @@ class InvertedIndex:
                     with open(filename, 'wb+') as inverted_index_file:
                         pickle.dump(inverted_index_barrel, inverted_index_file)
 
-        return filename
+        # return filename
 
     #end of function
     

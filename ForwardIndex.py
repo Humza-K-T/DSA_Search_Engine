@@ -43,9 +43,10 @@ class ForwardIndex:
         DocHistory={}
         DocHistoryPath=self.path+ "\\Doclist"
         try:
-            OpenFile1 = open(DocHistoryPath , 'rb')
-            DocHistory = pickle.load(OpenFile1)
-            OpenFile1.close()
+            if os.path.getsize(DocHistoryPath) > 0:
+                OpenFile1 = open(DocHistoryPath , 'rb')
+                DocHistory = pickle.load(OpenFile1)
+                OpenFile1.close()
 
         #catch block    
         except IOError:
@@ -110,8 +111,10 @@ class ForwardIndex:
                     ForwardIndexDictionary[DocumentId] = WordId
 
         #dumping file
+
+        path = os.path.join(self.path, filename)
         if(change):
-            path = os.path.join(self.path, filename)
+            # path = os.path.join(self.path, filename)
             with open(path, 'wb') as file:
                 pickle.dump(ForwardIndexDictionary, file)
 
