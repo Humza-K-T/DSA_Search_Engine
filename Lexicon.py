@@ -24,10 +24,8 @@ class Lexicon:
         self.DocHistory={}
         self.DocHistoryPath=self.path+"Doclist"
         self.lexicon = self.OpenLexicon()
-        
-       
-
-    #end of functrion
+          
+    #end of constructor
 
 
     #start of function
@@ -46,7 +44,7 @@ class Lexicon:
     #fun init, takes self & path
 
     def OpenLexicon(self):
-
+        """Takes self instance, opens file & loads it, catches exception if any. Serializes file, dumops it, returns lexicon"""
         #creating empty dictionary
         Lexicon1 = {} 
 
@@ -93,10 +91,10 @@ class Lexicon:
     #returns nothing
 
     def CreateLexicon(self, documentpath):
-
+        """Creates lexicon take self & doc path. Counts for files passed. Genertes progress bars.  Reads json file
+        create tokens. Saves lexicon prints article counts"""
         Lexicon2 = self.lexicon
         article_count=0
-
 
         DocHistoryPath=self.DocHistoryPath
 
@@ -105,7 +103,6 @@ class Lexicon:
 
             if path not in self.DocHistory:
                 
-
                 with open(path, encoding="utf8") as OpenFile2:
 
                     #reading the file
@@ -139,7 +136,6 @@ class Lexicon:
         with open(self.path, 'wb') as file:
             pickle.dump(Lexicon2, file)
 
-
         with open(DocHistoryPath, 'wb') as file:
             pickle.dump(self.DocHistory, file)
 
@@ -158,8 +154,8 @@ class Lexicon:
     #Change words to root form i.e., quickly->quick  
 
     def CreateTokens(self, words):
-
-      #  tokens = nltk.word_tokenize(words)
+        """Creates tokens, takes self instance and wordids, removes URLs, punctuations, does steeming, removes stop words
+        returns tokens"""
         
         #Removing URLs, numbers and punctuations
         #Removing stop words
@@ -181,14 +177,13 @@ class Lexicon:
     #returns lexicon
 
     def ReadLexicon(self):
-        
+        """Reads lexicon, takes self instance, loads it & returns it"""
         OpenFile3 = open(self.path, 'rb')
         Lexicon3 = pickle.load(OpenFile3)
         OpenFile3.close()
         return Lexicon3
 
     #end of function
-
 
     #start of function
     #fun searchwordid, takes self instance & word
@@ -198,7 +193,7 @@ class Lexicon:
     #returns id if found, else -1
 
     def SearchWordId(self, word):
-
+        """takes elf & word, looks for word, returns its id, if not fiund returns -1"""
         stemmer1 = nltk.stem.PorterStemmer()
         stemmer2 = stemmer1.stem(word)
 
@@ -218,6 +213,7 @@ class Lexicon:
     #fun exists, takes self instance & word
 
     def Exist(self, word):
+        """Checks if word exists or not, returns -1 if not"""
         return self.SearchWordId(word) != -1
 
     #end of function
