@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="colorlib.com">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-    <link href="static/css/main.css" rel="stylesheet" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://img.icons8.com/material-outlined/24/ffffff/search--v1.png" />
@@ -14,12 +13,12 @@
 
 <style>
   .search {
-    font-family:Lato;
-    font-color:black;
+    font-family: Lato;
+    font-color: black;
     list-style: disc;
-    margin: 15px 300px;
+    margin: 400px 300px;
     line-height: 1.6;
-    position: inherit;
+    position: absolute;
   }
 
   body {
@@ -57,16 +56,18 @@
   input[type=text], select {
    
     width: 43%;
+    top: 230px;
+    left: 410px;
     padding: 15px 20px;
-    margin: 240px 400px;
-    display: table;
+    display: -webkit-box;
     border: 10px solid white;
     border-radius: 100px;
+    position: absolute;
     box-sizing: border-box;
   }
 
   input[type=submit] {
-    width: 10%;
+    width: 12%;
     background-color: black;
     color: white;
     padding: 14px 20px;
@@ -74,8 +75,9 @@
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    position: relative;
-    left: 1200px;
+    position: fixed;
+    left: 1170px;
+    bottom: 3px;
   }
 
 
@@ -98,7 +100,7 @@
   .bg-img {
     background-image: url("https://wallpapercave.com/dwp1x/wp3469892.jpg");
     min-height: 100%;
-    border: 7px solid black;
+
     width: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -111,13 +113,13 @@
   }
 
   body::-webkit-scrollbar-track {
-    background: #0b0b45;
+    background: black;
   }
 
   body::-webkit-scrollbar-thumb {
     background-color: white; /* color of the scroll thumb */
     border-radius: 20px;
-    border: 3px solid #0b0b45;
+    border: 3px solid black;
   }
 
   .logo
@@ -136,17 +138,18 @@
   }
 
   .uploadbtn {
+    background: fixed;
     border: 0px solid black;
-    width:19%;
+    width: 12%;
     color: white;
     background-color: black;
     padding: 11px;
     border-radius: 100px;
     font-size: 15px;
     font-weight: normal;
-    position: absolute;
-    left: 930px;
-    bottom: 25px;
+    position: fixed;
+    left: 1170px;
+    bottom: 60px;
   }
 
 .upload-btn-wrapper input[type=file] {
@@ -170,6 +173,26 @@
     width: 50px;
     border-radius: 25px;
   }
+
+  .title {
+    color: black;
+    font-size: 20;
+  }
+  
+  .description {
+    color: black;
+    font-size: 14;
+    margin-bottom: 15;
+  }
+  
+  .path {
+    color: black;
+  }
+
+  html {
+    height: 100%;
+  }
+  
 </style>
 
   <body>
