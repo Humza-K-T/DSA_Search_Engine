@@ -6,46 +6,192 @@
     <meta name="author" content="colorlib.com">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
     <link href="static/css/main.css" rel="stylesheet" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://img.icons8.com/material-outlined/24/ffffff/search--v1.png" />
+    <title>Search |</title>
   </head>
+
+<style>
+  body {
+    font-family: "Lato", sans-serif;
+  }
+
+  #main {
+    transition: margin-left 0.5s;
+    padding: 16px;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  body,
+  html {
+    height: 100%;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .container {
+    position: absolute;
+    top: 15%;
+    left: 30%;
+    max-width: 600px;
+    padding: 16px;
+    background-color: white;
+  }
+
+  input[type=text], select {
+   
+    width: 43%;
+    padding: 15px 20px;
+    margin: 240px 400px;
+    display: table;
+    border: 10px solid white;
+    border-radius: 100px;
+    box-sizing: border-box;
+  }
+
+  input[type=submit] {
+    width: 10%;
+    background-color: black;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    position: absolute;
+    left: 1200px;
+  }
+
+
+  .btn {
+    background-color: #0b0b45;
+    height:20px;
+    color: white;
+    left:100px;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+
+    .btn:hover {
+        opacity: 1;
+    }
+
+  .bg-img {
+    background-image: url("https://wallpapercave.com/dwp1x/wp3469892.jpg");
+    min-height: 100%;
+    border: 7px solid black;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+  }
+
+  body::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  body::-webkit-scrollbar-track {
+    background: #0b0b45;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background-color: white; /* color of the scroll thumb */
+    border-radius: 20px;
+    border: 3px solid #0b0b45;
+  }
+
+  .logo
+  {
+    position: absolute;
+    top: 105px;
+    left: 450px;
+  }
+
+  .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    left: 1190px;
+    top: 20px;
+  }
+
+  .uploadbtn {
+    border: 0px solid black;
+    width:19%;
+    color: white;
+    background-color: black;
+    padding: 11px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: normal;
+    position: absolute;
+    left: 930px;
+    bottom: 19px;
+  }
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
+  .open-button {
+    background-color: white;
+    color: black;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    width: 50px;
+    border-radius: 25px;
+  }
+</style>
+
   <body>
-    
 
-    
-    <form method="POST" action="" enctype="multipart/form-data">
-      <p><input type="file" name="file"></p>
-      <p><input type="submit" value="Submit"></p>
-    </form>
-    <div class="s130">
+      <div class="bg-img">
+        <img src="/static/images/logo2.png" alt="Search Logo"class="logo"/></img>
       <form>
-        <div class="inner-form">
-          <div class="input-field first-wrap">
-            <div class="svg-wrapper">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-              </svg>
-            </div>
-            <input id="search" type="text" onkeypress="return runScript(event)" placeholder="What are you looking for?" />
-          </div>
-
-     
-
-          <div class="input-field second-wrap">
-            <button class="btn-search" onclick="getResults()" type="button">SEARCH</button>
-
-
-          </div>
+          <div>
+            <input id="search" type="text" onkeypress="return runScript(event)" style="border:black; border-width:5px; border-style:solid;" placeholder="What Do You Want?">
         </div>
-        <span class="info">ex. Game, Music, Video, Photography</span>
-
         <div class='search' id="search_results">
         </div>
       </form>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+      <input type="file" name="file" class="uploadbtn">
+      <input type="submit" value="Submit">
+    </form>
     </div>
+
     <script>
     // function to handle enter key press on text field
+
+    /*function newpage() {
+      location.replace("upload")
+    }*/
+
     function runScript(e) {
       //See notes about 'which' and 'key'
       if (e.keyCode == 13 || e.which == 13) {
+        //newpage();
         getResults();
         return false;
       }

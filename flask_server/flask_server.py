@@ -10,8 +10,8 @@ import ProjectConfiguration
 from Lexicon import Lexicon
 from InvertedIndex import InvertedIndex
 from search.search import Search
-import RUNME
 
+import RUNME
 
 # flask app & Api
 app = Flask(__name__)
@@ -19,8 +19,6 @@ api = Api(app)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER']=ProjectConfiguration.INPUTPATH+"//"
-
-
 
 
 # Indexes
@@ -44,12 +42,7 @@ def upload_file():
       
     return redirect('http://127.0.0.1:5000/')
 
-
-
-
-
 class Document(Resource):
-
     def get(self, doc_id):
 
         doc_id = int(doc_id[-7:])
@@ -64,6 +57,7 @@ class Document(Resource):
 
 
 class Search(Resource):
+
     # @cross_origin
     def get(self, search_query):
 
@@ -72,19 +66,12 @@ class Search(Resource):
 
         for doc, _ in docs:
 
-            # doc_id = int(doc[-7:])
-            # batch = doc_id // 64 + 1
-
             docAdress=ProjectConfiguration.UPDATED_JSONS+"/"+ doc
 
             filepath = docAdress+".json"
 
             with open(filepath, "rb") as json_file:
                 json_doc = json.load(json_file)
-
-                
-                    # if doc['content'].contains(search_query):
-            
 
 
                 if json_doc['title']!="":
@@ -95,13 +82,6 @@ class Search(Resource):
                         })
 
         return results
-
-
-
-
-
-
-
 
 api.add_resource(Setup, '/')
 api.add_resource(Search, '/search/<string:search_query>')

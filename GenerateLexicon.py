@@ -26,9 +26,8 @@ def GenerateLexicon(startingfile, endingfile):
 	#initializing variables
 	barrel = 0
 	number = len(lexicon)
-	#number=50
 
 	print("\n")
-	print(f"{number} Words Are: ")
+	print(f"{number} Words Found!")
 	print("\n")
 
