@@ -13,6 +13,15 @@
   </head>
 
 <style>
+  .search {
+    font-family:Lato;
+    font-color:black;
+    list-style: disc;
+    margin: 15px 300px;
+    line-height: 1.6;
+    position: inherit;
+  }
+
   body {
     font-family: "Lato", sans-serif;
   }
@@ -65,7 +74,7 @@
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    position: absolute;
+    position: relative;
     left: 1200px;
   }
 
@@ -137,7 +146,7 @@
     font-weight: normal;
     position: absolute;
     left: 930px;
-    bottom: 19px;
+    bottom: 25px;
   }
 
 .upload-btn-wrapper input[type=file] {
@@ -171,9 +180,9 @@
           <div>
             <input id="search" type="text" onkeypress="return runScript(event)" style="border:black; border-width:5px; border-style:solid;" placeholder="What Do You Want?">
         </div>
-        <div class='search' id="search_results">
-        </div>
       </form>
+      <div class='search' id="search_results">
+      </div>
 
     <form method="POST" action="" enctype="multipart/form-data">
       <input type="file" name="file" class="uploadbtn">
