@@ -16,7 +16,7 @@ class Search:
 			for doc in iie:
 				current_doc_hitlists = [iie[doc]]
 				for remaining_iie in inverted_index_entries[i + 1:]:
-					if doc in remaining_iie:
+					if not(doc  == None) and (doc in remaining_iie):
 						current_doc_hitlists.append(remaining_iie[doc])
 						del remaining_iie[doc]
 				

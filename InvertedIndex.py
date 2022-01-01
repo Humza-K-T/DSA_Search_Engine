@@ -24,7 +24,7 @@ class InvertedIndex:
 
     #start of function
     #fun CreateForwardIndex, takes self instance, document path & name of file
-    #returns name of file
+    #returns None
 
     def CreateInvertedIndex(self, ForwardIndexPath):
         """ Takes forward index path which is to be inverted & returns nothing. Creates inverted index & stores
