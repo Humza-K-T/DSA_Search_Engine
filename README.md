@@ -15,19 +15,30 @@
 
 # Working
     Everythig starts with document uploadation.
-    Soon after you upload document the lexicon, forward & inverted index are created.
+    Soon after you upload document the lexicon,
+    forward & inverted index are created.
 
 # Lexicon   
     Lexicon is stored in dictionary
 
 # Forward Index
-    After lexicon generation, inverted index in created. As searching is done on inverted index, therefore while creating forward index we eliminated duplicates by creating buckets on docID. We have also included threading to make process faster.
+    After lexicon generation, inverted index in created.
+    As searching is done on inverted index, therefore 
+    while creating forward index we eliminated duplicates
+    by creating buckets on docID. We have also included 
+    threading to make process faster.
 
 # Inverted Index   
-    For generating Inverted Index we again involved threading. The dataset is divided, multiple(2) threads are created and temporary inverted index is created,afterward we combine these temporay index. After combining temporary indexex are deleted. Information about hitlists canbe obtained from forward index.
+    For generating Inverted Index we again involved threading. 
+    The dataset is divided, multiple(2) threads are created and
+    temporary inverted index is created,afterward we combine these
+    temporay index. After combining temporary indexex are deleted.
+    Information about hitlists canbe obtained from forward index.
 
 # Search
-    For searching enter the required word or phrase in text box, that word or phrase(if phrase divide in small words) is passed to inveretd index to get result.
+    For searching enter the required word or phrase in text box,
+    that word or phrase(if phrase divide in small words) is 
+    passed to invereted index to get result.
 
 # Frontend
     Frontend is mostly in HTML, CSS & JAVASCRIPT
