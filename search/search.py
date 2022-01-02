@@ -1,68 +1,85 @@
+
+
 class Search:
+	"""Perfoms search operations"""
 
-	def __init__(self, lexicon, inverted_index):
+	#constructor
+	#takes 3 args,takes self instance, lexicon  & inverted index.
+	def __init__(self, lexicon, invertedindex):
+		"""Constructor, takes self instance, lexicon  & inverted index."""
 		self.lexicon = lexicon
-		self.inverted_index = inverted_index
+		self.invertedindex = invertedindex
 
+	#end of constructor
+
+	#function seearch
+	#takes 3 args, self instance, query & maxwords
 
 	def search(self, query, n=10):
 
-		search_word_ids = [self.lexicon.SearchWordId(word) for word in self.lexicon.CreateTokens(query)]
-		inverted_index_entries = [self.inverted_index.retrieve(word_id) for word_id in search_word_ids if word_id != -1]
+		wordids = [self.lexicon.SearchWordId(word) for word in self.lexicon.CreateTokens(query)]
+		searchinvertedindex = [self.invertedindex.retrieve(wordid) for wordid in wordids if wordid != -1]
 
-		docs_with_score = []
-		if len(inverted_index_entries)==0 or inverted_index_entries[0] == None: return docs_with_score
-		for i, iie in enumerate(inverted_index_entries):
-			for doc in iie:
-				current_doc_hitlists = [iie[doc]]
-				for remaining_iie in inverted_index_entries[i + 1:]:
-					if not(doc  == None) and (doc in remaining_iie):
-						current_doc_hitlists.append(remaining_iie[doc])
-						del remaining_iie[doc]
+		#creating empty dictionary
+		search = []
+
+		#checking if length is 0 or not, if zero or null, returning dictionary
+		if len(searchinvertedindex)==0 or searchinvertedindex[0] == None: return search
+		for i, enuminverind in enumerate(searchinvertedindex):
+			for document in enuminverind:
+				hitlist = [enuminverind[document]]
+				for remaininginvertedindex in searchinvertedindex[i + 1:]:
+					if not(document  == None) and (document in remaininginvertedindex):
+						hitlist.append(remaininginvertedindex[document])
+						del remaininginvertedindex[document]
 				
-				docs_with_score.append((doc, self.query_relavence_score(current_doc_hitlists)))
+				search.append((document, self.HitlistScore(hitlist)))
+
+		sorted(search, key=lambda x: x[1])
+		search.sort(key=lambda x: x[1], reverse=True)
+
+		return search[:n]
 
 
-		sorted(docs_with_score, key=lambda x: x[1])
-		docs_with_score.sort(key=lambda x: x[1], reverse=True)
+	def HitlistScore(self, hitlists):
+		""" Looks for hitlists, takes sef & hitlists, check how many times word appears"""
+		hitlistscore = 0
 
-		return docs_with_score[:n]
+		number = len(hitlists)
+		hitlistlength = [len(hitlist) for hitlist in hitlists]
+		hitlist= [0] * number
 
+		#empty dictionary
+		merged= []
 
-	def query_relavence_score(self, hitlists):
+		while hitlist != hitlistlength:
+			#empty dictionary
+			position = []
+			source = []
 
-		score = 0
+			for i in range(number):
+				if hitlist[i] == len(hitlists[i]): continue
+				position.append(hitlists[i][hitlist[i]])
+				source.append(i)
 
-		n = len(hitlists)
-		hitlist_lens = [len(hitlist) for hitlist in hitlists]
-		hitlist_is = [0] * n
+			minimum = min(position)
+			minind = position.index(minimum)
+			hitlist[source[minind]] += 1
 
-		joined_hits = []
+			#merging
+			merged.append((minind, minimum))
 
-		while hitlist_is != hitlist_lens:
-			terminal_positions = []
-			taken_from = []
+		lasthit = merged[0]
 
-			for i in range(n):
-				if hitlist_is[i] == len(hitlists[i]): continue
-				terminal_positions.append(hitlists[i][hitlist_is[i]])
-				taken_from.append(i)
+		#if hits, increment
+		for hit in merged[1:]:
+			hitlistscore += 1
+			if hit[0] != lasthit[0]: 
+				dist = hit[1] - lasthit[1]
+				hitlistscore += 100 / (dist + 1)
+			lasthit = hit
 
-			minimum = min(terminal_positions)
-			minimum_index = terminal_positions.index(minimum)
-			hitlist_is[taken_from[minimum_index]] += 1
-
-			joined_hits.append((minimum_index, minimum))
-
-		prev_hit = joined_hits[0]
-
-		for hit in joined_hits[1:]:
-			score += 1
-			if hit[0] != prev_hit[0]: 
-				dist = hit[1] - prev_hit[1]
-				score += 100 / (dist + 1)
-			prev_hit = hit
-
-		return score
+		#returnig score
+		return hitlistscore
 		
 

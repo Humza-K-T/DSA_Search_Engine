@@ -14,20 +14,11 @@ def GenerateLexicon(startingfile, endingfile):
 	#calling function to use dataset files
 	lexicon.CreateLexicon(ProjectConfiguration.InputPath(startingfile, endingfile))
 
-	print("\n")
-	print(f"Lexicon created with {len(lexicon)} words.")
-	print("\n")
-	
-	#printing process progress
-
-	print('-'*137)
-	print('*'*137)
-
 	#initializing variables
-	barrel = 0
 	number = len(lexicon)
 
+	print(f"Lexicon created with {len(lexicon)} words.")
 	print("\n")
 	print(f"{number} Words Found!")
-	print("\n")
+	
 

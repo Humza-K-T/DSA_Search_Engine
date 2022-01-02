@@ -33,11 +33,9 @@ def GenerateInvertedIndex():
 			GenInvIndDict.append(thread)
 		
 		for index in concurrent.futures.as_completed(GenInvIndDict):
-			print(f"{index.result()}  Inverted Index Created Successfully!")
+			print("Inverted Index Created Successfully!")
 
+		#merging temporary created index
 		GenInvInd.MergeIndex()
-
-	print('-'*137)
-	print('*'*137)
 
 	
