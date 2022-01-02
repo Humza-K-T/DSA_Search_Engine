@@ -1,6 +1,5 @@
 # imports
-from flask import Flask, render_template, request, redirect, url_for,flash
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect
 from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
 import ProjectConfiguration
@@ -10,8 +9,7 @@ import ProjectConfiguration
 from Lexicon import Lexicon
 from InvertedIndex import InvertedIndex
 from search.search import Search
-
-import RUNME
+import processFile
 
 # flask app & Api
 app = Flask(__name__)
@@ -38,7 +36,7 @@ def upload_file():
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
         uploaded_file.save(ProjectConfiguration.INPUTPATH+"//"+uploaded_file.filename)
-        RUNME.ProcessFile()
+        processFile.ProcessFile()
       
     return redirect('http://127.0.0.1:5000/')
 
