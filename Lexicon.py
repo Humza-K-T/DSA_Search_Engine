@@ -1,13 +1,13 @@
 import os
 import pickle
-import re
 import json
 import nltk
-
+import re
 from tqdm import tqdm
 
 class Lexicon:
-  
+    """Lexicon = {word1: 1,word2: 2,word3: 3,...}"""
+
     #Creating object for removing stopwords, i.e.,the,an,a....
     LexiconStopwords = set(nltk.corpus.stopwords.words('english'))
 
@@ -19,7 +19,7 @@ class Lexicon:
     #fun init, takes self & path
 
     def __init__(self, path):
-
+        """Takes pickle path to store lexicon,calls open lexicon"""
         self.path = path
         self.DocHistory={}
         self.DocHistoryPath=self.path+"Doclist"
@@ -44,7 +44,8 @@ class Lexicon:
     #fun init, takes self & path
 
     def OpenLexicon(self):
-        """Takes self instance, opens file & loads it, catches exception if any. Serializes file, dumops it, returns lexicon"""
+        """Called by lexicon constructor. Opens existing dictionary, if doestnot exist create new.
+        Takes self instance, opens/creates lexicon & loads it, catches exception if any. Serializes file, dumps it, returns lexicon"""
         #creating empty dictionary
         Lexicon1 = {} 
 
@@ -91,16 +92,17 @@ class Lexicon:
     #returns nothing
 
     def CreateLexicon(self, documentpath):
-        """Creates lexicon take self & doc path. Counts for files passed. Genertes progress bars.  Reads json file
-        create tokens. Saves lexicon prints article counts"""
+        """Createslexicon take self & doc path. Creates lexicon, Counts for files passed. Genertes progress bars.  Reads json file
+        create tokens. Saves lexicon prints article counts."""
         Lexicon2 = self.lexicon
-        article_count=0
+        articlecount=0
 
         DocHistoryPath=self.DocHistoryPath
 
         #iterating through each path
         for path in tqdm(documentpath):
 
+            #if the input file is not in dochistory i.e., lexicon not created
             if path not in self.DocHistory:
                 
                 with open(path, encoding="utf8") as OpenFile2:
@@ -113,21 +115,37 @@ class Lexicon:
                 OpenFile2.close()
                 print("\n"+path)
                 for document in documents:
-                    #calling the function,passignthe args
-                    token1 = self.CreateTokens(document['title'])
-                    token2 = self.CreateTokens(document['content'])
-                    article_count+=1
+                    #calling the function,passign the args
 
+                    #tokenizing title
+                    token1 = self.CreateTokens(document['title'])
+
+                    #tokenizing content/article
+                    token2 = self.CreateTokens(document['content'])
+
+                    #counting articles
+                    articlecount+=1
+
+                    #checking that title words/tokens exists in lexicon, if doesnot exist, adding it in lexicon
                     for x in token1:
                         if x != '' and x not in Lexicon2:
+                            #adding at the en of lexicon
                             Lexicon2[x] = len(Lexicon2) + 1
 
+                    #checking that content words/tokens exists in lexicon, if doesnot exist, adding it in lexicon
                     for x in token2:
                         if x != '' and x not in Lexicon2:
+                            #adding at the en of lexicon
                             Lexicon2[x] = len(Lexicon2) + 1
-                    
+                
+                    #assigning file name on basis of URL as every URL takes to unique page
+                    #saving files with .json extension. Removing any spaces,punctuations from URL....
                     docName=''.join(e for e in (document['url'].lstrip("https://").replace("/","_")) if e.isalnum())
+
+                    #saving files with .json extension at path
                     docpath= self.path.rstrip("Lexicon/Lexicon")+"/UpdatedJsons/"+docName[-50:]+".json"
+
+                    #saving files with .json extension
                     with open(docpath, "w") as newjson:
                         json.dump(document,newjson)
 
@@ -136,12 +154,15 @@ class Lexicon:
         with open(self.path, 'wb') as file:
             pickle.dump(Lexicon2, file)
 
+        #dumping
         with open(DocHistoryPath, 'wb') as file:
             pickle.dump(self.DocHistory, file)
 
         #closing the file    
         file.close()
-        print(f"Articles= {article_count}")
+
+        #printing article count
+        print(f"Articles= {articlecount}")
 
     #end of function
 
@@ -193,7 +214,7 @@ class Lexicon:
     #returns id if found, else -1
 
     def SearchWordId(self, word):
-        """takes elf & word, looks for word, returns its id, if not fiund returns -1"""
+        """takes self & word, looks for word in lexicon, returns its id, if not found returns -1. Called while searching."""
         stemmer1 = nltk.stem.PorterStemmer()
         stemmer2 = stemmer1.stem(word)
 

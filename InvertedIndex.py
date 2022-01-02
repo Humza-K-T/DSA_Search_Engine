@@ -3,17 +3,19 @@ import pickle
 import os
 import ntpath
 from tqdm import tqdm
-
 from ProjectConfiguration import FORWARDINDEXPATH
 
 class InvertedIndex:
+    """
+    The inverted index is a set of dictionaries of the form:
+    ii_dict_1 = { wordId1: [docId1, docId2, docId3...] wordId2: [docId1, docId2, docId3...]...}"""
+
 
     #start of function
     #acts as constructor
     #fun init, takes self,path,temppath,barrelsize,lexiconsize
-
     def __init__(self, path, temporarypath, sizeoflexicon, sizeofbarrel):
-
+        """Gets path to inverted index directory & temporary storage"""
         self.path = path
         self.temppath = temporarypath
         self.lexiconsize = sizeoflexicon
@@ -28,29 +30,31 @@ class InvertedIndex:
 
     def CreateInvertedIndex(self, ForwardIndexPath):
         """ Takes forward index path which is to be inverted & returns nothing. Creates inverted index & stores
-        it in temporary path. Doesnot override alrady existinf file. Called by multiple threads."""
+        it in temporary path. Doesnot override alrady existing file. Called by multiple threads."""
 
-        with open(ForwardIndexPath, 'rb') as forward_index_file:
-            forward_index = pickle.load(forward_index_file)
-            inverted_indexes = [{} for i in range(self.lexiconsize // self.barrelsize + 1)]
+        #opening forward index file, loading it
+        with open(ForwardIndexPath, 'rb') as forwardindexfile:
+            forwardindex = pickle.load(forwardindexfile)
 
-            for document in tqdm(forward_index):
-                for word_id in forward_index[document]:
+            invertedindex = [{} for i in range(self.lexiconsize // self.barrelsize + 1)]
 
-                    # Find concerned barrel
-                    barrel_index = word_id // self.barrelsize
+            for document in tqdm(forwardindex):
+                for wordid in forwardindex[document]:
 
-                    if word_id in inverted_indexes[barrel_index]:
-                        inverted_indexes[barrel_index][word_id][document] = forward_index[document][word_id]
+                    #Find barrel, which may have the word
+                    barrelindex = wordid // self.barrelsize
+
+                    if wordid in invertedindex[barrelindex]:
+                        invertedindex[barrelindex][wordid][document] = forwardindex[document][wordid]
                     else:
-                        inverted_indexes[barrel_index][word_id] = { document: forward_index[document][word_id] }
+                        invertedindex[barrelindex][wordid] = { document: forwardindex[document][wordid] }
 
             # Saving inverted index barrels which are not empty
-            for i, inverted_index_barrel in enumerate(inverted_indexes):
-                if not len(inverted_index_barrel) == 0:
+            for i, invertedindexbarrel in enumerate(invertedindex):
+                if not len(invertedindexbarrel) == 0:
                     filename = os.path.join(self.temppath, f"{i:03}_inverted_{ntpath.basename(ForwardIndexPath)}")
-                    with open(filename, 'wb+') as inverted_index_file:
-                        pickle.dump(inverted_index_barrel, inverted_index_file)
+                    with open(filename, 'wb+') as invertedindexfile:
+                        pickle.dump(invertedindexbarrel, invertedindexfile)
 
     #end of function
     
@@ -60,13 +64,12 @@ class InvertedIndex:
     #returns nothing
 
     def MergeIndex(self):
-
-        """Is called in GenerateInvertedIndex, used to combine the temporary created file.
+        """Is called in GenerateInvertedIndex, used to combine the temporary created files(craeted during thraeding).
          Updates in the barrel. Delete temporary files & update index file."""
-        temp_inverted_indexes = os.listdir(self.temppath)
+        tempinvind = os.listdir(self.temppath)
 
         for i in range(self.lexiconsize // self.barrelsize + 1):
-            concerned_indexes = [temp_index for temp_index in temp_inverted_indexes if temp_index.startswith(f"{i:03}_inverted_")]
+            concerned_indexes = [tempind for tempind in tempinvind if tempind.startswith(f"{i:03}_inverted_")]
             
             # If for i'th barrel no temp indexes exist continue
             if not len(concerned_indexes): continue

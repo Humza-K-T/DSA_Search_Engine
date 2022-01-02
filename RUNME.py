@@ -16,11 +16,8 @@ def ProcessFile():
 	total_files=len([item for item in os.listdir(directory) if os.path.isfile(os.path.join(directory, item))])
 
 	ending = total_files
-	print("\n")
 
 	GenerateLexicon.GenerateLexicon(starting,ending)
-
-	starting = 0
 
 	directory=ProjectConfiguration.UPDATED_JSONS
 	total_files=len([item for item in os.listdir(directory) if os.path.isfile(os.path.join(directory, item))])

@@ -7,6 +7,7 @@ import pickle
 from tqdm import tqdm
 
 class ForwardIndex:
+    """ForwardIndex = { Article1: [wordId <HitList>,....] Article2: [wordId <HitList>],...}"""
 
     #Creating object for removing stopwords, i.e.,the,an,a....
     GlobalStopwords = set(nltk.corpus.stopwords.words('english'))
@@ -20,9 +21,8 @@ class ForwardIndex:
     #fun init, takes self instance, path & lexicon
 
     def __init__(self, path, lexicon):
-
+        """Gets path of forward index docs & gets lexicon"""
         self.path = path
-
         self.lexicon = lexicon
 
     #end of constructor
@@ -33,13 +33,12 @@ class ForwardIndex:
     #returns path
 
     def AddForwardIndex(self, documentpaths, filename):
-        """Takes 3 arguments. Function is to go through each file & stemmerize words + remove punctuations
+        """Takes 3 arguments. Adds words with hitlists. Function is to go through each file & stemmerize words + remove punctuations
             & URLs. Serialzes the files & dumps them. Takes self instance, document path & filename. Uses dictionaries """
+        
         #creating empty dictionary
         ForwardIndexDictionary= {}
-        
-        
-        #passing every path & opening file
+       
         #try block
         DocHistory={}
         DocHistoryPath=self.path+ "\\Doclist"
@@ -67,22 +66,16 @@ class ForwardIndex:
 
             if path not in DocHistory:
                 change=True
-                
-                # with open(path, "rb") as OpenFile:
-                #     document = pickle.load(OpenFile)
-                #     DocHistory[path]=1  
+                 
                 with open(path, encoding="utf8") as newjson:
+                    #getting file content in variable
                     document = json.load(newjson)
                     DocHistory[path]=1
-
 
                 DocumentId = os.path.splitext(ntpath.basename(path))[0]
 
                 words= document['content']
-
-                # token = nltk.word_tokenize(document['content'])
                 token = re.sub('[^A-Za-z]', " ", words).split()
-
 
                 #Removing Punctuations
                 #Removing URL's
@@ -94,7 +87,6 @@ class ForwardIndex:
                 token = [x for x in token if not x in self.GlobalStopwords]
                 token = [self.GlobalStemmer.stem(x) for x in token]
 
-
                 #creating empty dictionary
                 WordId = {}
 
@@ -102,8 +94,9 @@ class ForwardIndex:
                 #by default posiion is set to one
                 position = 1
 
-                #iterating through each word
+                #iterating through each word in tokenized
                 for word in token:
+                    #if word not a space/empty & exists in lexicon, look for word in lexicon,get its id
                     if word != '' and self.lexicon.Exist(word):
                         key = self.lexicon.SearchWordId(word)
                         if key in WordId:
